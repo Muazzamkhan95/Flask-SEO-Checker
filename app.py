@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from bs4 import BeautifulSoup
 from models import SEORequest
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config.from_object(DevConfig)
@@ -15,9 +16,12 @@ login_manager = LoginManager()
 login_manager.login_view = 'login'  # redirect to this if user not logged in
 login_manager.init_app(app)
 
+
+
 # Create tables on startup (you can move this to a separate CLI or setup file later)
 with app.app_context():
     db.create_all()
+    migrate = Migrate(app, db)
 
 @login_manager.user_loader
 def load_user(user_id):
