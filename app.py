@@ -1,27 +1,36 @@
 from flask import Flask,request, render_template, redirect, url_for
 import requests
-from config import DevConfig
+from config import DevConfig, ProdConfig
 from models import db, User
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from bs4 import BeautifulSoup
 from models import SEORequest
 from flask_migrate import Migrate
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 app = Flask(__name__)
-app.config.from_object(DevConfig)
+env = os.environ.get("FLASK_ENV", "development")
+if env == "production":
+    app.config.from_object(ProdConfig)
+else:
+    app.config.from_object(DevConfig)
 db.init_app(app)
+
+# Create tables on startup (you can move this to a separate CLI or setup file later)
+migrate = Migrate(app, db)
+
+@app.before_request
+def create_tables_once():
+    if not getattr(app, "_tables_created", False):
+        db.create_all()
+        app._tables_created = True
 
 login_manager = LoginManager()
 login_manager.login_view = 'login'  # redirect to this if user not logged in
 login_manager.init_app(app)
-
-
-
-# Create tables on startup (you can move this to a separate CLI or setup file later)
-with app.app_context():
-    db.create_all()
-    migrate = Migrate(app, db)
 
 @login_manager.user_loader
 def load_user(user_id):
