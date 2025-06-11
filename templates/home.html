@@ -4,15 +4,31 @@
 
 {% block content %}
 <div class="home-wrapper">
-    <h1>Welcome to Your Flask Web App 🚀</h1>
-    <p>This is your starting point for building powerful web applications with Python, Flask, and PostgreSQL.</p>
+    <h1>🚀 Welcome to the SEO Checker App</h1>
+
+    <p>
+        This web app helps you analyze and track the SEO performance of any website. Powered by Flask, PostgreSQL, and BeautifulSoup, it lets you:
+    </p>
+
+    <ul>
+        <li>🔍 Enter any website URL and get instant SEO analysis</li>
+        <li>📊 View structured SEO scores based on metadata, tags, and structure</li>
+        <li>🧠 Track your past analysis with user-based SEO history</li>
+        <li>📈 Visualize trends in SEO score with interactive charts</li>
+    </ul>
+
+    <p>
+        Whether you're an agency, freelancer, or just curious — this tool gives you a simple yet powerful dashboard to monitor SEO health.
+    </p>
 
     {% if current_user.is_authenticated %}
-        <p>Hello, {{ current_user.email }} 👋</p>
+        <p>Welcome back, {{ current_user.email }} 👋</p>
         <a href="{{ url_for('dashboard') }}" class="button">Go to Dashboard</a>
     {% else %}
-        <a href="{{ url_for('login') }}" class="button">Login</a>
-        <a href="{{ url_for('register') }}" class="button secondary">Register</a>
+        <div class="auth-buttons">
+            <a href="{{ url_for('login') }}" class="button">Login</a>
+            <a href="{{ url_for('register') }}" class="button secondary">Create an Account</a>
+        </div>
     {% endif %}
 </div>
 {% endblock %}
