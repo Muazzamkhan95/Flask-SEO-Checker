@@ -8,16 +8,28 @@
     <p>Here’s your dashboard. Use the quick actions below to navigate.</p>
 
     <div class="dashboard-cards">
-        <a href="#" class="card">
-            <h3>Profile</h3>
-            <p>Manage your account and details.</p>
+        <a href="{{ url_for('profile') }}" class="card">
+            <h3>👤 Profile</h3>
+            <p>Manage your personal information and password.</p>
         </a>
-        <a href="#" class="card">
-            <h3>Projects</h3>
-            <p>View and manage your work items.</p>
+
+        <a href="{{ url_for('projects') }}" class="card">
+            <h3>📁 Projects</h3>
+            <p>View and manage your website SEO check history.</p>
         </a>
+
+        <a href="{{ url_for('SEOChecker') }}" class="card">
+            <h3>🔍 SEO Checker</h3>
+            <p>Analyze a website for SEO best practices.</p>
+        </a>
+
+        <a href="{{ url_for('seo_history') }}" class="card">
+            <h3>📊 SEO History</h3>
+            <p>View all your past SEO analysis reports.</p>
+        </a>
+
         <a href="{{ url_for('logout') }}" class="card logout">
-            <h3>Logout</h3>
+            <h3>🚪 Logout</h3>
             <p>End your session securely.</p>
         </a>
     </div>

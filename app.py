@@ -1,5 +1,7 @@
 from flask import Flask,request, render_template, redirect, url_for
 import requests
+from dotenv import load_dotenv
+load_dotenv()
 from config import DevConfig, ProdConfig
 from models import db, User
 from werkzeug.security import generate_password_hash,check_password_hash
@@ -7,15 +9,19 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from bs4 import BeautifulSoup
 from models import SEORequest
 from flask_migrate import Migrate
-from dotenv import load_dotenv
+
 import os
 app = Flask(__name__)
-load_dotenv()
+
+
+
 env = os.environ.get("FLASK_ENV", "development")
+
 if env == "production":
     app.config.from_object(ProdConfig)
 else:
     app.config.from_object(DevConfig)
+
 db.init_app(app)
 
 # Create tables on startup (you can move this to a separate CLI or setup file later)
@@ -43,6 +49,33 @@ def home():
 @login_required
 def dashboard():
     return render_template("dashboard.html")
+
+
+@app.route("/profile")
+@login_required
+def profile():
+    return render_template("profile.html")
+
+@app.route("/projects")
+@login_required
+def projects():
+    return render_template("projects.html")
+
+
+@app.route("/seo-history")
+@login_required
+def seo_history():
+    user_requests = SEORequest.query.filter_by(user_id=current_user.id).order_by(SEORequest.timestamp.desc()).all()
+
+    # Pre-format timestamps for chart
+    chart_data = {
+        "labels": [req.timestamp.strftime("%Y-%m-%d %H:%M") for req in user_requests],
+        "scores": [req.score for req in user_requests],
+        "totals": [req.score_out_of for req in user_requests],
+    }
+
+    return render_template("seo-history.html", requests=user_requests, chart_data=chart_data)
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
