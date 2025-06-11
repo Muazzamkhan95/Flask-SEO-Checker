@@ -9,9 +9,8 @@ from models import SEORequest
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 import os
-load_dotenv()
-
 app = Flask(__name__)
+load_dotenv()
 env = os.environ.get("FLASK_ENV", "development")
 if env == "production":
     app.config.from_object(ProdConfig)
