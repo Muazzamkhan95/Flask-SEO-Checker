@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}SEO Analyzer{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <h2>SEO Analyzer!</h2>
+        <h4>Hello! {{current_user.email}}</h4>
+        <form method="POST">
+            <label>Enter Website URL</label>
+            <input type="url" name="url" placeholder="https://example.com" required>
+            <button type="submit">Analyze</button>
+        </form>
+
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+</div>
+
+{% if info %}
+<div class="scrape-result">
+    <h3>SEO Report</h3>
+    <p><strong>SEO Score:</strong> {{ info.seo_score }} ({{ info.score_percentage }}%)</p>
+    <ul>
+        <li><strong>Title:</strong> {{ info.title }} ({{ info.title|length }} chars)</li>
+        <li><strong>Description:</strong> {{ info.description }} ({{ info.description|length }} chars)</li>
+        <li><strong>H1 Tag:</strong> {{ info.h1 }} (Found {{ info.h1_count }})</li>
+        <li><strong>H2 Tags:</strong>
+            <ul>
+                {% for h2 in info.h2 %}
+                <li>{{ h2 }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li><strong>Images with alt text:</strong> {{ info.image_alt_ratio }}</li>
+        <li><strong>Robots meta:</strong> {{ info.robots }}</li>
+        <li><strong>Canonical URL:</strong> {{ info.canonical }}</li>
+    </ul>
+</div>
+{% endif %}
+
+{% if history %}
+<hr>
+<div class="scrape-history">
+    <h3>Your SEO Analysis History</h3>
+    <table id="historyTable">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>URL</th>
+                <th>Score</th>
+                <th>Title</th>
+                <th>H1</th>
+                <th>Alt Text Ratio</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in history %}
+            <tr>
+                <td>{{ item.timestamp.strftime("%Y-%m-%d %H:%M") }}</td>
+                <td><a href="{{ item.url }}" target="_blank">{{ item.url }}</a></td>
+                <td>{{ item.score }}/{{ item.score_out_of }}</td>
+                <td>{{ item.title }}</td>
+                <td>{{ item.h1 }}</td>
+                <td>{{ item.image_alt_ratio }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#historyTable').DataTable({
+            pageLength: 5,
+            order: [[0, 'desc']], // sort by date column
+        });
+    });
+</script>
+{% endif %}
+{% endblock %}

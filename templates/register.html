@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <h2>Create Account</h2>
+        <form method="POST">
+            <label>Email</label>
+            <input type="email" name="email" required>
+
+            <label>Password</label>
+            <input type="password" name="password" required>
+
+            <button type="submit">Register</button>
+        </form>
+
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+
+        {% if message %}
+        <p class="success">{{ message }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

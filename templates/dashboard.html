@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    <h2>Welcome back, {{ current_user.email }} 👋</h2>
+    <p>Here’s your dashboard. Use the quick actions below to navigate.</p>
+
+    <div class="dashboard-cards">
+        <a href="#" class="card">
+            <h3>Profile</h3>
+            <p>Manage your account and details.</p>
+        </a>
+        <a href="#" class="card">
+            <h3>Projects</h3>
+            <p>View and manage your work items.</p>
+        </a>
+        <a href="{{ url_for('logout') }}" class="card logout">
+            <h3>Logout</h3>
+            <p>End your session securely.</p>
+        </a>
+    </div>
+</div>
+{% endblock %}
